@@ -26,12 +26,10 @@ class InLayoutRequestWidget<E, T extends RequestBloc<E>> extends StatelessWidget
     this.bloc, {
     Key key,
     @required this.builder,
-    this.performRequest,
     this.listener,
     this.buildLoading,
     this.buildInitial,
     this.buildError,
-    this.retryEnabled = false,
     this.onRetry,
   }) : super(key: key);
 
@@ -42,20 +40,7 @@ class InLayoutRequestWidget<E, T extends RequestBloc<E>> extends StatelessWidget
   /// Builder for successful request
   final SuccessRequestWidgetBuilder<E> builder;
 
-  /// What request should be performed when laying out this widget.
-  ///
-  /// This will usually be action that will change state of [bloc] and send
-  /// new state that [BlocBuilder] will listen to
-  ///
-  /// [performRequest] can be null if the request shouldn't be fired right
-  /// when the widget is to appear on the screen.
-  final VoidCallback performRequest;
-
-  /// This will enable retry button in case of error which will call either
-  /// [onRetry] or [performRequest] if specified.
-  final bool retryEnabled;
-
-  /// Called when user clicks onRetry. [retryEnabled] must be set to true.
+  /// Called when user clicks onRetry
   final VoidCallback onRetry;
 
   /// Builder for loading state
@@ -74,11 +59,6 @@ class InLayoutRequestWidget<E, T extends RequestBloc<E>> extends StatelessWidget
 
   @override
   Widget build(BuildContext context) {
-    // If performRequest is not null then execute it
-    if (performRequest != null) {
-      performRequest();
-    }
-
     return BlocConsumer<T, BlocState<E>>(
       bloc: bloc,
       listenWhen: (previous, current) => listener != null,
@@ -89,7 +69,7 @@ class InLayoutRequestWidget<E, T extends RequestBloc<E>> extends StatelessWidget
         }
 
         if (state is ErrorState<E>) {
-          return getErrorWidget(context, buildError, state, retryEnabled, onRetry, performRequest);
+          return getErrorWidget(context, buildError, state, onRetry);
         }
 
         if (state is ContentState<E>) {

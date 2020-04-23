@@ -29,12 +29,10 @@ class BlockingRequestWidget<E, T extends RequestBloc<E>> extends StatefulWidget 
   const BlockingRequestWidget(this.bloc, {
     Key key,
     @required this.builder,
-    this.performRequest,
     this.listener,
     this.buildLoading,
     this.buildInitial,
     this.buildError,
-    this.retryEnabled = false,
     this.onRetry,
   }) : super(key: key);
 
@@ -45,20 +43,7 @@ class BlockingRequestWidget<E, T extends RequestBloc<E>> extends StatefulWidget 
   /// Builder for successful request
   final SuccessRequestWidgetBuilder<E> builder;
 
-  /// What request should be performed when laying out this widget.
-  ///
-  /// This will usually be action that will change state of [bloc] and send
-  /// new state that [BlocBuilder] will listen to
-  ///
-  /// [performRequest] can be null if the request shouldn't be fired right
-  /// when the widget is to appear on the screen.
-  final VoidCallback performRequest;
-
-  /// This will enable retry button in case of error which will call either
-  /// [onRetry] or [performRequest] if specified.
-  final bool retryEnabled;
-
-  /// Called when user clicks onRetry. [retryEnabled] must be set to true.
+  /// Called when user clicks onRetry.
   final VoidCallback onRetry;
 
   /// Builder for loading state
@@ -105,8 +90,8 @@ class _BlockingRequestWidgetState<E, T extends RequestBloc<E>>
 
         if (state is ErrorState<E>) {
           final errorWidget = getErrorWidgetWithButton(
-              context, widget.buildError, state, widget.retryEnabled,
-              widget.onRetry, widget.performRequest, () {
+              context, widget.buildError, state,
+              widget.onRetry, () {
             Navigator.pop(context);
           });
           _showDialog(state, errorWidget, dismissible: true);
@@ -117,11 +102,6 @@ class _BlockingRequestWidgetState<E, T extends RequestBloc<E>>
   }
 
   Widget _buildWidget(BuildContext context) {
-    // If performRequest is not null then execute it
-    if (widget.performRequest != null) {
-      widget.performRequest();
-    }
-
     return BlocBuilder<T, BlocState<E>>(
       bloc: widget.bloc,
       builder: (BuildContext context, BlocState<E> state) {
