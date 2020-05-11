@@ -17,7 +17,6 @@ import '../event/request_event.dart';
 /// This is designed to be used with [InLayoutRequestWidget] or
 /// [BlockingRequestWidget] to make whole thing automatic
 abstract class RequestBloc<T> extends Bloc<BlocEvent<T>, BlocState<T>> {
-
   /// Initial state, everything is null and loading is set to false
   @override
   BlocState<T> get initialState => InitialState<T>();
@@ -26,17 +25,20 @@ abstract class RequestBloc<T> extends Bloc<BlocEvent<T>, BlocState<T>> {
   /// all other events are being forwarded to method that has to be overridden  [mapEvent]
   @override
   Stream<BlocState<T>> mapEventToState(BlocEvent<T> event) async* {
-    if(event is MakeRequest<T>){
+    if (event is MakeRequest<T>) {
       yield LoadingState<T>();
 
-      try{
+      try {
         final T content = await event.request;
         yield ContentState<T>(content);
-      }catch(error, stackTrace){
+      } catch (error, stackTrace) {
+        print('Error while running MakeRequest:');
+        print(error.toString());
+        print(stackTrace);
         yield ErrorState<T>(error, stackTrace);
       }
-    }else{
-       yield* mapEvent(event);
+    } else {
+      yield* mapEvent(event);
     }
   }
 
