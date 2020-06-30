@@ -1,18 +1,8 @@
-import 'package:equatable/equatable.dart';
+import 'package:common_state/common_state.dart';
 import 'package:flutter/material.dart';
 
-/// Default bloc state to pass
-/// We needed this because of [RequestState], to allow more different
-/// states, all states for building a bloc need to extend [BlocState]
+/// Default bloc state to pass.
 ///
-/// [BlocState] will handle [Equatable] and [props] and fill them with default
-/// data.
+/// Extend this for arbitrary states you might need that have nothing to do with [RequestState] loading/content/error.
 @immutable
-abstract class BlocState<T> extends Equatable{
-  const BlocState([this._props]);
-
-  final List<T> _props;
-
-  @override
-  List<T> get props => _props ?? <T>[];
-}
+abstract class BlocState<T>{ }

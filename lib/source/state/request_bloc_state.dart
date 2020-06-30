@@ -4,22 +4,20 @@ import 'bloc_state.dart';
 
 @immutable
 abstract class RequestState<T> extends BlocState<T>{
-  const RequestState([List<T> props]) : super(props);
+  RequestState();
 }
 
 @immutable
 class InitialState<T> extends RequestState<T>{
-  const InitialState({List<T> props}) : super(props);
 }
 
 @immutable
 class LoadingState<T> extends RequestState<T>{
-  const LoadingState({List<T> props}) : super(props);
 }
 
 @immutable
 class ErrorState<T> extends RequestState<T>{
-  const ErrorState(this.error, this.stackTrace) : super();
+  ErrorState(this.error, this.stackTrace);
 
   final Object error;
   final StackTrace stackTrace;
@@ -27,7 +25,7 @@ class ErrorState<T> extends RequestState<T>{
 
 @immutable
 class ContentState<T> extends RequestState<T>{
-  ContentState(this.content) : super(<T>[content]);
+  ContentState(this.content);
 
   final T content;
 }
