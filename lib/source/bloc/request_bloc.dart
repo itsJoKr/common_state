@@ -26,7 +26,11 @@ abstract class RequestBloc<T> extends Bloc<BlocEvent<T>, BlocState<T>> {
   @override
   Stream<BlocState<T>> mapEventToState(BlocEvent<T> event) async* {
     if (event is MakeRequest<T>) {
-      yield LoadingState<T>();
+      if (state is ContentState) { // e.g. pull to refresh
+        yield LoadingState<T>((state as ContentState).content);
+      } else {
+        yield LoadingState<T>(null);
+      }
 
       try {
         final T content = await event.request;

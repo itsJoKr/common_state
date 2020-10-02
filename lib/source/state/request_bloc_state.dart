@@ -13,6 +13,10 @@ class InitialState<T> extends RequestState<T>{
 
 @immutable
 class LoadingState<T> extends RequestState<T>{
+  LoadingState(this.content);
+
+  /// Used for e.g. pull-to-refresh, when you have content but still loading
+  final T content;
 }
 
 @immutable
