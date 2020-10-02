@@ -12,7 +12,7 @@ import 'package:common_state/source/state/request_bloc_state.dart';
 import 'package:flutter/material.dart';
 
 //typedef RequestWidgetBuilder<T> = Widget Function(BuildContext context, RequestSnapshot<T> snapshot);
-typedef SuccessRequestWidgetBuilder<T> = Widget Function(BuildContext context, T data);
+typedef ContentRequestWidgetBuilder<T> = Widget Function(BuildContext context, T data);
 typedef RequestWidgetBuilder<T> = Widget Function(BuildContext context);
 typedef ErrorRequestWidgetBuilder<T> = Widget Function(BuildContext context, ErrorState errorState);
 

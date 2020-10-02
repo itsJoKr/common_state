@@ -38,13 +38,13 @@ class InLayoutRequestWidget<E, T extends RequestBloc<E>> extends StatelessWidget
   final T bloc;
 
   /// Builder for successful request
-  final SuccessRequestWidgetBuilder<E> builder;
+  final ContentRequestWidgetBuilder<E> builder;
 
   /// Called when user clicks onRetry
   final VoidCallback onRetry;
 
   /// Builder for loading state
-  final RequestWidgetBuilder<E> buildLoading;
+  final ContentRequestWidgetBuilder<E> buildLoading;
 
   /// Builder for initial state, before network request is started
   final RequestWidgetBuilder<E> buildInitial;
@@ -65,7 +65,7 @@ class InLayoutRequestWidget<E, T extends RequestBloc<E>> extends StatelessWidget
       listener: (context, state) => listener(context, state),
       builder: (BuildContext context, BlocState<E> state) {
         if (state is LoadingState<E>) {
-          return (buildLoading != null) ? buildLoading(context) : CommonStateHandling().loadingBuilder(context);
+          return (buildLoading != null) ? buildLoading(context, state.content) : CommonStateHandling().loadingBuilder(context);
         }
 
         if (state is ErrorState<E>) {

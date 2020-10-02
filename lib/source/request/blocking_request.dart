@@ -41,13 +41,13 @@ class BlockingRequestWidget<E, T extends RequestBloc<E>> extends StatefulWidget 
   final T bloc;
 
   /// Builder for successful request
-  final SuccessRequestWidgetBuilder<E> builder;
+  final ContentRequestWidgetBuilder<E> builder;
 
   /// Called when user clicks onRetry.
   final VoidCallback onRetry;
 
   /// Builder for loading state
-  final RequestWidgetBuilder<E> buildLoading;
+  final ContentRequestWidgetBuilder<E> buildLoading;
 
   /// Builder for initial state, before network request is started
   final RequestWidgetBuilder<E> buildInitial;
@@ -84,7 +84,7 @@ class _BlockingRequestWidgetState<E, T extends RequestBloc<E>>
 
         if (state is LoadingState<E>) {
           final loadingWidget = (widget.buildLoading != null) ? widget
-              .buildLoading(context) : CommonStateHandling().loadingBuilder(context);
+              .buildLoading(context, state.content) : CommonStateHandling().loadingBuilder(context);
           _showDialog(state, loadingWidget);
         }
 
